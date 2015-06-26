@@ -12,6 +12,8 @@ public class ImsApplication {
 		ims.adjustStockLevel();
 		JDBC jdbc = new JDBC();
 		jdbc.listProducts();
+		GUI sD = new GUI();
+		sD.showEvent();
 	}
 
 	
