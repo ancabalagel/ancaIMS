@@ -84,13 +84,13 @@ private void prepareGUI() {
 	
 	productList.getModel().addTableModelListener(new TableModelListener() {
 
-	      public void tableChanged(TableModelEvent e) { // print changes to file
+	      public void tableChanged(TableModelEvent e) { 
 	    	 column = e.getColumn();
 	    	 row = e.getLastRow();	 
 	    	 if(column != -1){	    		 
 	    		 updatedData = (String) productList.getModel().getValueAt(row, column);
 	    		 lop.updateData(row + 1, updatedData);
-	    		 lop.printToFile();	
+	    		 lop.printToFile();			// print changes to file
 	    	 }	    	 
  	      }
 	    });
@@ -105,7 +105,7 @@ private void prepareGUI() {
 
 	public void addProducts(ArrayList<Product> products){ // adds new quantities
 		DefaultTableModel model = (DefaultTableModel) productList.getModel();
-		for(int i = 0; i < products.size() ; i++ ){
+		for(int i = 0; i < products.size() ; i++ ){	
 			model.addRow(new Object[]{Integer.toString(i + 1) , products.get(i).getName(), Integer.toString(products.get(i).getQuantity())});			
 		}
 	}
