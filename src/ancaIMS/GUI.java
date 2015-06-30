@@ -1,66 +1,122 @@
 package ancaIMS;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import javax.swing.JButton;
+import java.util.ArrayList;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
 public class GUI extends JFrame {
 	private JFrame mainFrame;
-	private JPanel controlPanel;
-	private JLabel headerLabel;
-	private JLabel statusLabel;
-public GUI(){prepareGUI();}	
+	private JLabel messageLabel;
+	private JPanel controlPanel;	
+	private JTable productList;
+	private String columnNames[] = {"Product ID" , "Product Name", "Quantity"};
+	private DefaultTableModel tableModel;
+	private JScrollPane tableScroll;
+	private ListOfProducts lop;	
+	private int column;
+	private int row;
+	private String updatedData;
+	
+	
+	
+public GUI(ListOfProducts lop){
+	this.lop = lop;
+	prepareGUI();}	
 
 private void prepareGUI() {
-	mainFrame = new JFrame ("Java SWING Examples");
-	mainFrame.setSize(400, 400);
-	mainFrame.setLayout(new GridLayout(3, 1));
-	headerLabel = new JLabel("", JLabel.CENTER);
-	statusLabel = new JLabel("", JLabel.CENTER);
-	statusLabel.setSize(350, 100);
-	mainFrame.addWindowListener(new WindowAdapter() {
-		public void windowClosing(WindowEvent windowEvent) {
-		System.exit(0);
-		}
-		});
-		controlPanel = new JPanel();
-		controlPanel.setLayout(new FlowLayout());
-		mainFrame.add(headerLabel);
-		mainFrame.add(controlPanel);
-		mainFrame.add(statusLabel);
-		mainFrame.setVisible(true);
-		}
+	controlPanel = new JPanel(new BorderLayout());				
+	tableModel = new DefaultTableModel(columnNames, 0){		
 
-void showEvent() {
-	headerLabel.setText("Press Button");
-	JButton okButton = new JButton("OK");
-	JButton submitButton = new JButton("Submit");
-	JButton cancelButton = new JButton("Cancel");
-	okButton.addActionListener( new BCL());
-	submitButton.addActionListener( new BCL());
-	cancelButton.addActionListener( new BCL());
-	controlPanel.add(okButton);
-	controlPanel.add(submitButton);
-	controlPanel.add(cancelButton);
+		private static final long serialVersionUID = 1L;  //makes cells uneditable except for quantity column
+		public boolean isCellEditable(int row, int column){  
+			 if(column == 2)
+				 return true;
+			else
+				 return false;
+		 }
+		 
+	};
+	productList = new JTable(tableModel);
+	productList.setDefaultRenderer(Object.class, new DefaultTableCellRenderer(){
+
+		private static final long serialVersionUID = 1L;
+
+		@Override    // changes row color for low stock levels
+	    public Component getTableCellRendererComponent(JTable table,Object value, boolean isSelected, boolean hasFocus, int row, int col) {
+
+	        super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
+
+	        String quantity = (String)table.getModel().getValueAt(row, 2);
+	        
+	        if (Integer.parseInt(quantity) < 5) {	          
+	            setForeground(Color.RED);	
+	            
+	        } else {	            
+	            setForeground(table.getForeground()); 
+	        }       
+	        return this;
+	    }   
+	});
+
+	tableScroll = new JScrollPane (productList);
+	tableScroll.setBorder(BorderFactory.createEmptyBorder());
+	
+	productList.getModel().addTableModelListener(new TableModelListener() {
+
+	      public void tableChanged(TableModelEvent e) { // print changes to file
+	    	 column = e.getColumn();
+	    	 row = e.getLastRow();	 
+	    	 if(column != -1){	    		 
+	    		 updatedData = (String) productList.getModel().getValueAt(row, column);
+	    		 lop.updateData(row + 1, updatedData);
+	    		 lop.printToFile();	
+	    	 }	    	 
+ 	      }
+	    });
+	
+	mainFrame = new JFrame ("Inventory Management System");
+	mainFrame.setSize(700, 450);
+	mainFrame.setLayout(new GridLayout(3, 1));
+	mainFrame.add(tableScroll);
+	mainFrame.add(controlPanel);	
 	mainFrame.setVisible(true);
-}
-private class BCL implements ActionListener {
-@Override
-public void actionPerformed ( ActionEvent ae) {
-String command = ae.getActionCommand();
-switch (command) {
-case "OK": statusLabel.setText("OK!");
-break;
-case "Submit": statusLabel.setText("Submitted!");
-break;
-case "Cancel": statusLabel.setText("Cancel not possible");
-break;
-}}}
+	}
+
+	public void addProducts(ArrayList<Product> products){ // adds new quantities
+		DefaultTableModel model = (DefaultTableModel) productList.getModel();
+		for(int i = 0; i < products.size() ; i++ ){
+			model.addRow(new Object[]{Integer.toString(i + 1) , products.get(i).getName(), Integer.toString(products.get(i).getQuantity())});			
+		}
+	}
+
+	public String getUpdatedData(){
+		return updatedData;
+	}
+
+	public int getUpdateID(){
+		return row + 1;
+	}
+	
+	
 }

@@ -6,22 +6,18 @@ public class Product  {
 
 		private String name;
 		private int stockLevel;
-		
-		public Product () {
-			
-		System.out.println("enter product");
-		Scanner x = new Scanner(System.in);
-		name = x.next();
-		System.out.println("enter quantity");
-		Scanner y = new Scanner(System.in);
-		stockLevel = y.nextInt();
-		}
-		
-		public Product (String name, int quantity) {
+		private int productID;
+				
+		public Product (int id, String name, int quantity) {
+			this.productID = id;
 			this.name = name;
 			this.stockLevel = quantity;
 		}
 		
+		public int getID(){
+			return productID;
+		}
+				
 		public String getName() {
 			return name;
 		}
@@ -33,5 +29,8 @@ public class Product  {
 		public int getQuantity() {
 			return stockLevel;
 		}
+	
+		
+		
 		
 	}

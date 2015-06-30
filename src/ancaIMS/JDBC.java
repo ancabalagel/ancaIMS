@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class JDBC {
 
@@ -15,7 +16,11 @@ public class JDBC {
 	static final String PASS = "Alabala,123";
 	Connection conn = null;
 	Statement stmt = null;
-
+	
+	private ArrayList<Integer> productQuantity = new ArrayList<Integer>();
+	private ArrayList<String> productName = new ArrayList<String>();
+	private ArrayList<Integer> productID = new ArrayList<Integer>();
+	
 	public void accessDB() {	//connecting to the db
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -32,16 +37,20 @@ public class JDBC {
 			String sql = "SELECT productID,productName, stockLevel FROM products"; // getting all records
 			ResultSet rs = stmt.executeQuery(sql);
 			while (rs.next()) { 	//running through all records
-				int id = rs.getInt("productID");
-				String name = rs.getString("productName");
-				int quantity = rs.getInt("stockLevel");
-				if (quantity < 5) {  // if low stock then display message
-					System.out
-							.println("Stock is low for the following product:"+ " " + name + ";" + " " + "Stock Level:"+ " " + quantity);
-				}
+				productID.add(rs.getInt("productID"));
+				productName.add(rs.getString("productName"));
+				productQuantity.add(rs.getInt("stockLevel"));
+
 			}
+			for(int i = 0; i < productID.size(); i++){
+						
+			if (productQuantity.get(i) < 5) {  // if low stock then display message
+						System.out.println("Stock is low for the following product:"+ " " + productName.get(i) + ";" + " " + "Stock Level:"+ " " + productQuantity.get(i));
+				}	
+				
 			rs.close();
-		} catch (SQLException e) {
+			} 
+		}catch (SQLException e) {
 			// cannot get connection
 			e.printStackTrace();
 		} finally {
@@ -81,5 +90,17 @@ public class JDBC {
 			e.printStackTrace();
 		}
 		closeConnection();
+	}
+	
+	public ArrayList<Integer> getProductID(){
+		return productID;
+	}
+	
+	public ArrayList<String> getProductName(){
+		return productName;
+	}
+	
+	public ArrayList<Integer> getProductQuantity(){
+		return productQuantity;
 	}
 }

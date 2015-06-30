@@ -4,17 +4,17 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ImsApplication {
+	
+	private static JDBC jdbc;
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		
-		ListOfProducts ims = new ListOfProducts();
-		ims.adjustStockLevel();
-		JDBC jdbc = new JDBC();
+				
+		jdbc = new JDBC();
 		jdbc.listProducts();
-		GUI sD = new GUI();
-		sD.showEvent();
+		ListOfProducts ims = new ListOfProducts(jdbc);
+		GUI sD = new GUI(ims);		
+		sD.addProducts(ims.getProducts());
+		
 	}
 
-	
 }
