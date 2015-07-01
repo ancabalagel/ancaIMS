@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class JDBC {
 
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-	static final String DB_URL = "jdbc:mysql://localhost:3306/mydb";
+	static final String DB_URL = "jdbc:mysql://10.50.25.6:3306/mydb";
 	static final String USER = "IMT";
 	static final String PASS = "Alabala,123";
 	Connection conn = null;
