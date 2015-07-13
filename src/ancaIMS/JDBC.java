@@ -1,5 +1,11 @@
 package ancaIMS;
 
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -7,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class JDBC {
 
@@ -43,12 +50,27 @@ public class JDBC {
 				productQuantity.add(rs.getInt("stockLevel"));
 				productThreshold.add(rs.getInt("threshold"));
 			}
+			try{
+			Date date = new Date();
+			PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter("productsfile2.txt", true))); 			
+			writer.println();
+			writer.println(date);  //adding the date to the log file	
 			for(int i = 0; i < productID.size(); i++){						
-				if (productQuantity.get(i) < 5) {  // if low stock then display message
-						System.out.println("Stock is low for the following product:"+ " " + productName.get(i) + ";" + " " + "Stock Level:"+ " " + productQuantity.get(i));
-				}					
+				if (productQuantity.get(i) < productThreshold.get(i)) {  // if low stock then display message																		
+						writer.println(productName.get(i)+ "low stock "+ productQuantity.get(i));		//printing each stock change to productsfile2.txt												
+					}}}catch (FileNotFoundException e) {
+							// file not found
+							e.printStackTrace();
+					} catch (UnsupportedEncodingException e) {
+							// cannot add to file
+							e.printStackTrace();
+					} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+					}							
+					//System.out.println("Stock is low for the following product:"+ " " + productName.get(i) + ";" + " " + "Stock Level:"+ " " + productQuantity.get(i));							
+			
 			rs.close();
-			} 
 		}catch (SQLException e) {
 			// cannot get connection
 			e.printStackTrace();

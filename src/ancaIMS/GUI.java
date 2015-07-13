@@ -91,12 +91,12 @@ private void prepareGUI() {
 	
 	productList.getModel().addTableModelListener(new TableModelListener() {
 	      public void tableChanged(TableModelEvent e) { 
-	    	 column = e.getColumn();
+	    	 //column = e.getColumn();
 	    	 row = e.getLastRow();	 
 	    	 if(column != -1){	    		 
-	    		 updatedData = (String) productList.getModel().getValueAt(row, column);
+	    		 updatedData = (String) productList.getModel().getValueAt(row, 2);
 	    		 lop.updateData(row + 1, updatedData);
-	    		 updatedTh = Integer.parseInt((String)(productList.getModel().getValueAt(row, column)));
+	    		 updatedTh = Integer.parseInt((String)(productList.getModel().getValueAt(row, 3)));
 	    		 lop.updateTh(row+1, updatedTh);			
 	    	 }	    	 
  	      }
