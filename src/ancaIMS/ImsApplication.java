@@ -10,8 +10,7 @@ public class ImsApplication {
 		jdbc.listProducts();
 		ListOfProducts ims = new ListOfProducts(jdbc);
 		GUI sD = new GUI(ims);		
-		sD.addProducts(ims.getProducts());
-		
+		sD.addProducts(ims.getProducts());		
 	}
 
 }

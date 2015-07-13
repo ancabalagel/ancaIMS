@@ -1,5 +1,9 @@
 package ancaIMS;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ListOfProducts {
 	
@@ -34,5 +38,81 @@ public class ListOfProducts {
 			}
 		}
 	}	
-}
+
+	public void saveReportToFile(){
+		try{
+			int numOfChars;
+			int totalSpacesLeft;
+			int productID;
+			int productQuantity;
+			
+			Date date = new Date();
+			String report = "Stock Report Generated at " + date + "\r\n";
+			report += "\r\n";
+			report += "|----ID----|------Product Name------|-Quantity-|\r\n";
+			report += "\r\n";
+			File reportFile = new File("productsfile2.txt");
+			for(int i = 0; i <= products.size() -1; i++){
+				if(products.get(i).getQuantity() < products.get(i).getThreshold()){
+				
+				totalSpacesLeft = 20 ;
+				productID = products.get(i).getID();
+				productQuantity = products.get(i).getQuantity();
+
+				if(productID < 10){
+					report += "|  " + products.get(i).getID() + "       |";
+				}
+				else if(productID  > 9 && productID < 100){
+					report += "|  " + products.get(i).getID() + "      |";
+				}
+				else if(productID > 99 && productID < 1000){
+					report += "|  " + products.get(i).getID() + "     |";
+				}
+				else if(productID > 999 && productID < 10000){
+					report += "|  " + products.get(i).getID() + "    |";
+				}
+						
+				report += "   " + products.get(i).getName() ;
+				
+				numOfChars = products.get(i).getName().length();			
+				totalSpacesLeft = totalSpacesLeft - numOfChars;
+				
+				for(int whiteSpace = 0; whiteSpace <= totalSpacesLeft; whiteSpace++){
+					report += " ";
+				}
+				
+				report += "|  ";
+				
+				if(productQuantity < 9 && productQuantity >= 0){
+					report +=  productQuantity + "       |";
+				}
+				else if(productQuantity < 0 && productQuantity > -10){
+					report +=  productQuantity + "      |";
+				}
+				else if(productQuantity < -9 && productQuantity > -100){
+					report +=  productQuantity + "     |";
+				}
+				
+				else if(productQuantity > 8 && productQuantity < 100){
+					report +=  products.get(i).getQuantity() + "      |" ;
+				}
+				else if(products.get(i).getQuantity() > 99 && products.get(i).getQuantity() < 1000){
+					report +=  products.get(i).getQuantity() + "     |" ;
+				}
+				else if(products.get(i).getQuantity() > 999 && products.get(i).getQuantity() < 10000){
+					report +=  products.get(i).getQuantity() + "     |" ;
+				}				
+				report += "\r\n";				
+				report += "\r\n";
+				}
+			}
+			
+			System.out.println(report);
+			FileWriter fw = new FileWriter(reportFile);
+			fw.write(report);
+			fw.close();
+		}catch (IOException e){
+			e.printStackTrace();
+		}
+}}
 

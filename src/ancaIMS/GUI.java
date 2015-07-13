@@ -73,7 +73,14 @@ private void prepareGUI() {
 			j.addProduct(count, newProduct);
 			tableModel.addRow(new Object[]{count,newProduct,0,5});
     	}
-    });   
+    });  
+    
+    saveReport.addActionListener(new ActionListener() {
+    	@Override
+    	public void actionPerformed (ActionEvent e) {
+    		lop.saveReportToFile();
+    	}
+    });
     
     controlPanel = new JPanel(new BorderLayout());				
 	tableModel = new DefaultTableModel(columnNames, 0){	
@@ -106,7 +113,7 @@ private void prepareGUI() {
 	mainFrame.setSize(700, 450);
     mainFrame.add(tableScroll,BorderLayout.CENTER);
     mainFrame.add(menuBar,BorderLayout.NORTH);
-	mainFrame.setVisible(true);
+	mainFrame.setVisible(false);
 	}
 
 	public void addProducts(ArrayList<Product> products){ // adds quantities
@@ -114,8 +121,9 @@ private void prepareGUI() {
 		for(int i = 0; i < products.size() ; i++ ){	
 			model.addRow(new Object[]{Integer.toString(i + 1) , products.get(i).getName(), Integer.toString(products.get(i).getQuantity()), Integer.toString(products.get(i).getThreshold())});			
 		}
+		mainFrame.setVisible(true);
 	}
-
+	
 	public String getUpdatedData(){
 		return updatedData;
 	}

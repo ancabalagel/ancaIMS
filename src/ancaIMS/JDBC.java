@@ -32,7 +32,6 @@ public class JDBC {
 	public void accessDB() {	//connecting to the db
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			System.out.println("Connecting to database...");
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
 		} catch (Exception e) {
 			System.out.println("failed" + e.toString());}
@@ -49,34 +48,12 @@ public class JDBC {
 				productName.add(rs.getString("productName"));
 				productQuantity.add(rs.getInt("stockLevel"));
 				productThreshold.add(rs.getInt("threshold"));
-			}
-			try{
-			Date date = new Date();
-			PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter("productsfile2.txt", true))); 			
-			writer.println();
-			writer.println(date);  //adding the date to the log file	
-			for(int i = 0; i < productID.size(); i++){						
-				if (productQuantity.get(i) < productThreshold.get(i)) {  // if low stock then display message																		
-						writer.println(productName.get(i)+ "low stock "+ productQuantity.get(i));		//printing each stock change to productsfile2.txt												
-					}}}catch (FileNotFoundException e) {
-							// file not found
-							e.printStackTrace();
-					} catch (UnsupportedEncodingException e) {
-							// cannot add to file
-							e.printStackTrace();
-					} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-					}							
-					//System.out.println("Stock is low for the following product:"+ " " + productName.get(i) + ";" + " " + "Stock Level:"+ " " + productQuantity.get(i));							
-			
+			}			
 			rs.close();
 		}catch (SQLException e) {
 			// cannot get connection
 			e.printStackTrace();
-		} finally {
-			closeConnection();
-		}
+		} 
 	}
 
 	public void closeConnection() {
@@ -96,7 +73,6 @@ public class JDBC {
 	}
 
 	public void amendRecords(int inQuantity, String InName) {		//changing stock levels in the db		
-		accessDB();		
 		try {
 			PreparedStatement stmt= conn.prepareStatement("UPDATE Products SET stockLevel = ? WHERE productName = ?");			
 			stmt.setInt(1, inQuantity);
@@ -106,11 +82,9 @@ public class JDBC {
 			System.out.println("error while trying to amend stock level");
 			e.printStackTrace();
 		}
-		closeConnection();
 	}
 	
 	public void amendTh(int row, int newTh){
-		accessDB();
 		try {
 			stmt = conn.createStatement();
 			String sql = "UPDATE Products SET threshold =" + newTh+ " WHERE productID = "+ row+ "";
@@ -119,11 +93,9 @@ public class JDBC {
 			System.out.println("error while trying to amend stock level");
 			e.printStackTrace();
 		}
-		closeConnection();
 	}
 	
 	public void addProduct(int productID, String productName){ 
-		accessDB();
         try {
                stmt = conn.createStatement();
                String sql = "INSERT INTO Products VALUES (" + productID + ", '" + productName + "', " + 0 + ", "+5+")";
@@ -132,8 +104,7 @@ public class JDBC {
         } catch (SQLException e) {
         	System.out.println("error while trying to amend stock level");
                e.printStackTrace();
-        }
-        closeConnection();
+        }      
  }
 	
 	public ArrayList<Integer> getProductID(){

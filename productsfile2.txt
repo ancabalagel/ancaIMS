@@ -1,0 +1,10 @@
+Stock Report Generated at Mon Jul 13 21:23:38 BST 2015
+
+|----ID----|------Product Name------|-Quantity-|-OrderReq?-|------Last Updated-----|
+
+|  4       |   mini statue          |  7       |
+
+|  7       |   angry gnome          |  2       |
+
+|  9       |   funny gnome          |  2       |
+
