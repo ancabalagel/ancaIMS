@@ -18,7 +18,7 @@ public class ListOfProducts {
 	public ListOfProducts(JDBC jdbc) {
 		this.jdbc = jdbc;
 		for(int i = 0; i < jdbc.getProductID().size(); i++){
-			products.add(new Product(jdbc.getProductID().get(i), jdbc.getProductName().get(i), jdbc.getProductQuantity().get(i)));
+			products.add(new Product(jdbc.getProductID().get(i), jdbc.getProductName().get(i), jdbc.getProductQuantity().get(i), jdbc.getProductThreshold().get(i)));
 		}
 	}
 	public ArrayList<Product> getProducts(){
@@ -28,10 +28,17 @@ public class ListOfProducts {
 	public void updateData(int productID, String data){
 		for(int i = 0; i < products.size(); i++){
 			if(productID == products.get(i).getID()){
-				products.get(i).setQuantity(Integer.parseInt(data));
-				System.out.println(products.get(i).getName());
-				
+				products.get(i).setQuantity(Integer.parseInt(data));								
 				jdbc.amendRecords(Integer.parseInt(data), products.get(i).getName());				
+			}
+		}
+	}
+	
+	public void updateTh(int row, int newTh){
+		for(int i = 0; i < products.size(); i++){
+			if(row == products.get(i).getID()){
+				products.get(i).setTh(newTh);								
+				jdbc.amendTh(row, newTh);				
 			}
 		}
 	}
