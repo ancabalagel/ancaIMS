@@ -1,10 +1,16 @@
-Stock Report Generated at Mon Jul 13 21:23:38 BST 2015
+Stock Report Generated at Tue Jul 14 14:34:20 BST 2015
 
-|----ID----|------Product Name------|-Quantity-|-OrderReq?-|------Last Updated-----|
+|----ID----|------Product Name------|-Quantity-|
 
-|  4       |   mini statue          |  7       |
+|  1       |   gnome                |  1       |
 
-|  7       |   angry gnome          |  2       |
+|  4       |   mini statue          |  1       |
 
-|  9       |   funny gnome          |  2       |
+|  7       |   angry gnome          |  1       |
+
+|  9       |   funny gnome          |  1       |
+
+|  12      |   mini lights          |  1       |
+
+|  13      |   flower pot           |  1       |
 

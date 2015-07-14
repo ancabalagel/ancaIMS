@@ -5,11 +5,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.swing.JOptionPane;
+
 public class ListOfProducts {
 	
 	private ArrayList<Product> products = new ArrayList<Product>();  // stores each product name and its quantity such that it can be displayed on screen
-    private ImsApplication ims;
     private JDBC jdbc;
+    private boolean ok = false;
 	
 	public ListOfProducts(JDBC jdbc) {
 		this.jdbc = jdbc;
@@ -25,9 +27,18 @@ public class ListOfProducts {
 		for(int i = 0; i < products.size(); i++){
 			if(productID == products.get(i).getID()){
 				products.get(i).setQuantity(Integer.parseInt(data));								
-				jdbc.amendRecords(Integer.parseInt(data), products.get(i).getName());				
-			}
-		}
+				jdbc.amendRecords(Integer.parseInt(data), products.get(i).getName());
+				if(ok){
+					if (products.get(i).getQuantity() < products.get(i).getThreshold()) {
+						JOptionPane.showMessageDialog(null, "Stock level is low for this product.");
+					}
+				}
+			}			
+		}		
+	}
+
+	public void setOk(boolean ok){
+		this.ok = ok;
 	}
 	
 	public void updateTh(int row, int newTh){
@@ -45,6 +56,8 @@ public class ListOfProducts {
 			int totalSpacesLeft;
 			int productID;
 			int productQuantity;
+			int count =0;
+			ArrayList <Integer> order = new ArrayList<Integer>(); 
 			
 			Date date = new Date();
 			String report = "Stock Report Generated at " + date + "\r\n";
@@ -54,24 +67,25 @@ public class ListOfProducts {
 			File reportFile = new File("productsfile2.txt");
 			for(int i = 0; i <= products.size() -1; i++){
 				if(products.get(i).getQuantity() < products.get(i).getThreshold()){
-				
+				count++;
+				order.add(products.get(i).getID());
 				totalSpacesLeft = 20 ;
 				productID = products.get(i).getID();
 				productQuantity = products.get(i).getQuantity();
 
 				if(productID < 10){
-					report += "|  " + products.get(i).getID() + "       |";
+					report += "|  " + products.get(i).getID() + "       |";					
 				}
 				else if(productID  > 9 && productID < 100){
-					report += "|  " + products.get(i).getID() + "      |";
+					report += "|  " + products.get(i).getID() + "      |";					
 				}
 				else if(productID > 99 && productID < 1000){
-					report += "|  " + products.get(i).getID() + "     |";
+					report += "|  " + products.get(i).getID() + "     |";				
 				}
 				else if(productID > 999 && productID < 10000){
-					report += "|  " + products.get(i).getID() + "    |";
-				}
-						
+					report += "|  " + products.get(i).getID() + "    |";				
+				}			
+				
 				report += "   " + products.get(i).getName() ;
 				
 				numOfChars = products.get(i).getName().length();			
@@ -106,8 +120,15 @@ public class ListOfProducts {
 				report += "\r\n";
 				}
 			}
-			
-			System.out.println(report);
+			if (count>5) {
+				JOptionPane.showMessageDialog(null, "purchase order has been sent");			
+				for(int i: order){
+					updateData(i,Integer.toString(products.get(i-1).getThreshold()));
+
+				}
+			}
+
+			//System.out.println(report);
 			FileWriter fw = new FileWriter(reportFile);
 			fw.write(report);
 			fw.close();

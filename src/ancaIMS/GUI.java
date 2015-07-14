@@ -31,7 +31,6 @@ import javax.swing.table.DefaultTableModel;
 
 public class GUI extends JFrame {
 	private JFrame mainFrame;
-	private JPanel controlPanel;	
 	private JTable productList;
 	private String columnNames[] = {"Product ID" , "Product Name", "Quantity", "Threshold"};
 	private DefaultTableModel tableModel;
@@ -60,10 +59,8 @@ private void prepareGUI() {
     menuBar.add(submenu2);
     JMenuItem addProduct = new JMenuItem("Add New Product");    
     submenu1.add(addProduct);    
-    JMenuItem saveReport = new JMenuItem("Generate Stock Report");
-    JMenuItem makeOrder = new JMenuItem("Generate Purchase Order");
-    submenu2.add(saveReport);
-    submenu2.add(makeOrder);
+    JMenuItem saveReport = new JMenuItem("Generate Stock Report");    
+    submenu2.add(saveReport);    
 	
     addProduct.addActionListener(new ActionListener(){
     	@Override
@@ -82,7 +79,7 @@ private void prepareGUI() {
     	}
     });
     
-    controlPanel = new JPanel(new BorderLayout());				
+    new JPanel(new BorderLayout());				
 	tableModel = new DefaultTableModel(columnNames, 0){	
 		private static final long serialVersionUID = 1L;  //makes cells uneditable except for quantity column
 		public boolean isCellEditable(int row, int column){  
@@ -97,8 +94,7 @@ private void prepareGUI() {
 	tableScroll.setBorder(BorderFactory.createEmptyBorder());
 	
 	productList.getModel().addTableModelListener(new TableModelListener() {
-	      public void tableChanged(TableModelEvent e) { 
-	    	 //column = e.getColumn();
+	      public void tableChanged(TableModelEvent e) { 	    	
 	    	 row = e.getLastRow();	 
 	    	 if(column != -1){	    		 
 	    		 updatedData = (String) productList.getModel().getValueAt(row, 2);
@@ -122,6 +118,7 @@ private void prepareGUI() {
 			model.addRow(new Object[]{Integer.toString(i + 1) , products.get(i).getName(), Integer.toString(products.get(i).getQuantity()), Integer.toString(products.get(i).getThreshold())});			
 		}
 		mainFrame.setVisible(true);
+		lop.setOk(true);
 	}
 	
 	public String getUpdatedData(){

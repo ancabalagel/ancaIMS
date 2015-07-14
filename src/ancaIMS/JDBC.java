@@ -1,11 +1,5 @@
 package ancaIMS;
 
-import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -13,7 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
+
+import javax.swing.JOptionPane;
 
 public class JDBC {
 
@@ -77,7 +72,7 @@ public class JDBC {
 			PreparedStatement stmt= conn.prepareStatement("UPDATE Products SET stockLevel = ? WHERE productName = ?");			
 			stmt.setInt(1, inQuantity);
 			stmt.setString(2, InName);			
-			stmt.executeUpdate(); //amending quantity by name			
+			stmt.executeUpdate(); //amending quantity by name					
 		} catch (SQLException e) {
 			System.out.println("error while trying to amend stock level");
 			e.printStackTrace();

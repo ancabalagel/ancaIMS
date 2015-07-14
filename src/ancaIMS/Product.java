@@ -23,7 +23,7 @@ public class Product  {
 		}
 		
 		public void setQuantity(int newQuantity) {
-			 stockLevel = newQuantity;
+			 stockLevel = newQuantity;			 
 		}
 		
 		public void setTh(int newTh){
