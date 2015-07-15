@@ -27,7 +27,7 @@ public class ListOfProducts {
 		for(int i = 0; i < products.size(); i++){
 			if(productID == products.get(i).getID()){
 				products.get(i).setQuantity(Integer.parseInt(data));								
-				jdbc.amendRecords(Integer.parseInt(data), products.get(i).getName());
+				jdbc.updateDB(Integer.parseInt(data), products.get(i).getID());
 				if(ok){
 					if (products.get(i).getQuantity() < products.get(i).getThreshold()) {
 						JOptionPane.showMessageDialog(null, "Stock level is low for this product.");
@@ -45,7 +45,7 @@ public class ListOfProducts {
 		for(int i = 0; i < products.size(); i++){
 			if(row == products.get(i).getID()){				
 				products.get(i).setTh(newTh);								
-				jdbc.amendTh(row, newTh);				
+				jdbc.amendTh(newTh, row);				
 			}
 		}
 	}	
@@ -121,10 +121,10 @@ public class ListOfProducts {
 				}
 			}
 			if (count>5) {
-				JOptionPane.showMessageDialog(null, "purchase order has been sent");			
+				JOptionPane.showMessageDialog(null, "Purchase order has been sent");			
 				for(int i: order){
 					updateData(i,Integer.toString(products.get(i-1).getThreshold()));
-
+					
 				}
 			}
 

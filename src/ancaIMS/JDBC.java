@@ -67,19 +67,29 @@ public class JDBC {
 		}
 	}
 
-	public void amendRecords(int inQuantity, String InName) {		//changing stock levels in the db		
+    public void updateDB(int sql5, int sql4){ // Update an entry in a particular row in the database
+ 	   try {
+ 	   stmt = conn.createStatement();
+ 	   String sql3 = "UPDATE Products SET stockLevel = " + sql5 + " WHERE productID = " + sql4 + "";
+ 	   stmt.executeUpdate(sql3);
+ 	   }catch (SQLException e){
+ 		// TODO Auto-generated catch block
+            e.printStackTrace();
+ 	   }
+    }
+	
+	public void amendRecords(int inQuantity, String inName) {		//changing stock levels in the db		
 		try {
-			PreparedStatement stmt= conn.prepareStatement("UPDATE Products SET stockLevel = ? WHERE productName = ?");			
-			stmt.setInt(1, inQuantity);
-			stmt.setString(2, InName);			
-			stmt.executeUpdate(); //amending quantity by name					
+			stmt = conn.createStatement();
+			String sql = "UPDATE Products SET stockLevel = " + inQuantity + " WHERE productName = " + inName + "";
+			stmt.executeUpdate(sql);
 		} catch (SQLException e) {
 			System.out.println("error while trying to amend stock level");
 			e.printStackTrace();
 		}
 	}
 	
-	public void amendTh(int row, int newTh){
+	public void amendTh(int newTh, int row){
 		try {
 			stmt = conn.createStatement();
 			String sql = "UPDATE Products SET threshold =" + newTh+ " WHERE productID = "+ row+ "";
@@ -92,8 +102,9 @@ public class JDBC {
 	
 	public void addProduct(int productID, String productName){ 
         try {
+        	accessDB();
                stmt = conn.createStatement();
-               String sql = "INSERT INTO Products VALUES (" + productID + ", '" + productName + "', " + 0 + ", "+5+")";
+               String sql = "INSERT INTO Products VALUES (" + productID + ", '" + productName + "', " + 0 + ", " + 5 + ")";
                stmt.executeUpdate(sql);
                
         } catch (SQLException e) {

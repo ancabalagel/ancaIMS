@@ -42,6 +42,9 @@ public class GUI extends JFrame {
 	private int updatedTh;
 	private int count;
 	private String newProduct;
+	private int newQuantity;
+	private int newThreshold;
+	private int changeID;
 	private static JDBC j;
 	
 	
@@ -57,8 +60,12 @@ private void prepareGUI() {
     JMenu submenu2 = new JMenu("Stock Report");
     menuBar.add(submenu1);    
     menuBar.add(submenu2);
-    JMenuItem addProduct = new JMenuItem("Add New Product");    
+    JMenuItem addProduct = new JMenuItem("Add New Product");
+    JMenuItem changeQuantity = new JMenuItem("Change Product Quantity");
+    JMenuItem changeThreshold = new JMenuItem("Change Product Threshold");
     submenu1.add(addProduct);    
+    submenu1.add(changeQuantity);
+    submenu1.add(changeThreshold);
     JMenuItem saveReport = new JMenuItem("Generate Stock Report");    
     submenu2.add(saveReport);    
 	
@@ -69,6 +76,34 @@ private void prepareGUI() {
 			count = (tableModel.getRowCount()+1);
 			j.addProduct(count, newProduct);
 			tableModel.addRow(new Object[]{count,newProduct,0,5});
+    	}
+    });
+    
+    changeQuantity.addActionListener(new ActionListener(){
+    	@Override
+    	public void actionPerformed(ActionEvent e){
+    		j.accessDB();
+        	changeID = Integer.parseInt((String)JOptionPane.showInputDialog("Please enter the id of the product you wish to change"));
+        	newQuantity = Integer.parseInt((String)JOptionPane.showInputDialog("Product ID: " + changeID + "   "
+        			+ "Product Name: " + tableModel.getValueAt(changeID - 1, 1) + "   Product Quantity: "
+        			+ "" + tableModel.getValueAt(changeID - 1, 2) + "   Product Threshold: "
+        			+ "" + tableModel.getValueAt(changeID - 1, 3) + "\n\nPlease enter the new quantity"));
+        	j.updateDB(newQuantity, changeID);
+        	tableModel.setValueAt(newQuantity, changeID-1, 2);
+    	}
+    });
+    
+    changeThreshold.addActionListener(new ActionListener(){
+    	@Override
+    	public void actionPerformed(ActionEvent e){    	
+    		j.accessDB();
+        	changeID = Integer.parseInt((String)JOptionPane.showInputDialog("Please enter the id of the product you wish to change"));
+        	newThreshold = Integer.parseInt((String)JOptionPane.showInputDialog("Product ID: " + changeID + "   "
+        			+ "Product Name: " + tableModel.getValueAt(changeID - 1, 1) + "   Product Quantity: "
+        			+ "" + tableModel.getValueAt(changeID - 1, 2) + "   Product Threshold: "
+        			+ "" + tableModel.getValueAt(changeID - 1, 3) + "\n\nPlease enter the new threshold"));
+        	j.amendTh(newThreshold, changeID);
+        	tableModel.setValueAt(newThreshold, changeID-1, 3);
     	}
     });  
     
@@ -83,7 +118,7 @@ private void prepareGUI() {
 	tableModel = new DefaultTableModel(columnNames, 0){	
 		private static final long serialVersionUID = 1L;  //makes cells uneditable except for quantity column
 		public boolean isCellEditable(int row, int column){  
-			if(column == 2 || column == 3)
+			if(column == 1)
 				return true;
 			else
 				return false;
@@ -93,7 +128,7 @@ private void prepareGUI() {
 	tableScroll = new JScrollPane (productList);
 	tableScroll.setBorder(BorderFactory.createEmptyBorder());
 	
-	productList.getModel().addTableModelListener(new TableModelListener() {
+	/*productList.getModel().addTableModelListener(new TableModelListener() {
 	      public void tableChanged(TableModelEvent e) { 	    	
 	    	 row = e.getLastRow();	 
 	    	 if(column != -1){	    		 
@@ -103,7 +138,7 @@ private void prepareGUI() {
 	    		 lop.updateTh(row+1, updatedTh);			
 	    	 }	    	 
  	      }
-	    });
+	    });*/
 	
 	mainFrame = new JFrame ("Inventory Management System");
 	mainFrame.setSize(700, 450);

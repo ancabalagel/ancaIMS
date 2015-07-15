@@ -1,16 +1,16 @@
-Stock Report Generated at Tue Jul 14 14:34:20 BST 2015
+Stock Report Generated at Wed Jul 15 09:43:23 BST 2015
 
 |----ID----|------Product Name------|-Quantity-|
 
-|  1       |   gnome                |  1       |
+|  2       |   jacuzzi              |  1       |
 
-|  4       |   mini statue          |  1       |
+|  3       |   stone decoration     |  1       |
 
-|  7       |   angry gnome          |  1       |
-
-|  9       |   funny gnome          |  1       |
+|  10      |   happy gnome          |  1       |
 
 |  12      |   mini lights          |  1       |
 
-|  13      |   flower pot           |  1       |
+|  23      |   rotrr                |  0       |
+
+|  27      |   sfasd                |  0       |
 
