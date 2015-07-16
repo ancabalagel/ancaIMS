@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
 public class JDBC {
 
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-	static final String DB_URL = "jdbc:mysql://10.50.20.24:3306/test";
+	static final String DB_URL = "jdbc:mysql://10.50.20.38:3306/test";
 	static final String USER = "IMT";
 	static final String PASS = "netbuilder";
 	Connection conn = null;
